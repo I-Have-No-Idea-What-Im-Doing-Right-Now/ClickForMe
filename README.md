@@ -16,7 +16,7 @@ Click For Me is a mod for Cookie Clicker (https://orteil.dashnet.org/cookieclick
 - Click the bookmark while in the game
 
 ##### With a userscript
-- Make sure you have Violent Monkey extension installed
+- Make sure you have Violent Monkey extension installed (https://violentmonkey.github.io/)
 - Create a new userscript and paste in this code
 
 ```
