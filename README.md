@@ -18,7 +18,7 @@ Click For Me is a mod for Cookie Clicker (https://orteil.dashnet.org/cookieclick
 ##### With a userscript
 - Make sure you have Violent Monkey extension installed
 - Create a new userscript and paste in this code
-`````
+
 ```
 // ==UserScript==
 // @name         Cookie Clicker Click For Me Mod
