@@ -2,9 +2,11 @@
 name: Deploy static content to Pages
 
 on:
-  # Runs on pushes targeting the default branch
+  # Runs on pushes targeting the default branch, but only when files under src/ changed
   push:
     branches: ["main"]
+    paths:
+      - 'src/**'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -31,13 +33,73 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # Needed so we can diff commits in the push range
+          fetch-depth: 0
+
+      - name: Check for non-comment changes in src
+        id: check_changes
+        # This uses a heuristic to detect whether any added lines inside `src/`
+        # are not-only-comments. For manual `workflow_dispatch` runs we allow deploy.
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BEFORE: ${{ github.event.before }}
+          AFTER: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          echo "Event: $EVENT_NAME"
+          # Allow manual runs
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            echo "manual run -> allow deploy"
+            echo "non_comment_changes=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # Determine an appropriate git diff range. For initial commits/force pushes
+          # GitHub may set BEFORE to all zeros — handle that by diffing the single commit.
+          if [ -z "$BEFORE" ] || [[ "$BEFORE" =~ ^0+$ ]]; then
+            RANGE="${AFTER}^..${AFTER}"
+          else
+            RANGE="${BEFORE}..${AFTER}"
+          fi
+          echo "Diff range: $RANGE"
+
+          # Generate the diff limited to src/ and capture added lines
+          git diff --no-color --unified=0 $RANGE -- src || true
+          git diff --no-color --unified=0 $RANGE -- src > diff.txt || true
+
+          # Extract added lines (lines starting with a single '+', not '+++')
+          awk '/^\+[^+]/ {print substr($0,2)}' diff.txt > added.txt || true
+
+          # Remove blank lines
+          grep -vE '^[[:space:]]*$' added.txt > added_nonblank.txt || true
+
+          # Heuristic: remove lines that look like comments only. This covers common
+          # single-line comment starters: //, #, <!--, ;, REM, and block/asterisk starts
+          # Note: this is a heuristic and won't be perfect for every language.
+          grep -vE '^[[:space:]]*(//|#|<!--|/\*|\*|--|;|REM\b)' added_nonblank.txt > added_code.txt || true
+
+          if [ -s added_code.txt ]; then
+            echo "Found non-comment additions in src/"
+            echo "non_comment_changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "No non-comment additions found in src/ — skipping deploy"
+            echo "non_comment_changes=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
+        # Only needed if we will upload/deploy
+        if: steps.check_changes.outputs.non_comment_changes == 'true'
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
+        if: steps.check_changes.outputs.non_comment_changes == 'true'
         with:
           # Upload the source folder
           path: './src'
+
       - name: Deploy to GitHub Pages
         id: deployment
+        if: steps.check_changes.outputs.non_comment_changes == 'true'
         uses: actions/deploy-pages@v5
