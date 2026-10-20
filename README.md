@@ -24,8 +24,8 @@ Click For Me is a mod for Cookie Clicker (https://orteil.dashnet.org/cookieclick
 // @name         Cookie Clicker Click For Me Mod
 // @namespace    http://tampermonkey.net/
 // @version      1.0
-// @description  Automatically loads a mod when Cookie Clicker finishes initializing
-// @author       You
+// @description  Automatically loads the Click For Me mod when Cookie Clicker finishes initializing
+// @author       i-have-no-idea-what-im-doing-right-now
 // @match        https://orteil.dashnet.org/cookieclicker/
 // @match        https://orteil.dashnet.org/cookieclicker/beta/
 // @grant        none
