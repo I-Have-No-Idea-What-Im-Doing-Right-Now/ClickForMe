@@ -1,6 +1,20 @@
 let autoClickerRunning = false;
 let autoClicker;
 
+function updateAutoclickerState(state) {
+  autoClickerRunning = state;
+  if (autoClickerRunning) {
+    autoClicker = setInterval(function () { // Set an interval to auto click the cookie
+      for (let i = 0; i < 100; i++) {
+        Game.ClickCookie(); // Click the cookie
+      }
+    }, 1);
+  }
+  else {
+    clearInterval(autoClicker); // Clear the autoclicker interval
+  }
+}
+
 function init() {
   console.info("LOADED MOD: ClickForMe");
   Game.Popup("Loaded Click For Me Mod!");
@@ -16,23 +30,14 @@ function init() {
 
   // Add a buy function to shimmering veil (off) to disable autoclicker when buying
   Game.UpgradesById[563].buyFunction = function () {
-    autoClickerRunning = false; // Disable autoclicker
+    updateAutoclickerState(false); // Disable autoclicker
   }
 
   document.addEventListener('keydown', // Add an event listener on keydown
     function (event) {
       if (event.key !== "\\") return; // Only run on backslash key pressed
-      autoClickerRunning = !autoClickerRunning; // Toggle state of autoClickerRunning
-      if (autoClickerRunning) {
-        autoClicker = setInterval(function () { // Set an interval to auto click the cookie
-          for (let i = 0; i < 100; i++) {
-            Game.ClickCookie(); // Click the cookie
-          }
-        }, 1);
-      }
-      else {
-        clearInterval(autoClicker); // Clear the autoclicker interval
-      }
+      updateAutoclickerState(!autoClickerRunning);  // Toggle state of autoClickerRunning
+
     }
   )
 }
