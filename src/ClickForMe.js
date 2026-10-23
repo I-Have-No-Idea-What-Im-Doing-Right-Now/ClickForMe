@@ -14,6 +14,11 @@ function init() {
     if (Game.cookieClickSound > 7) Game.cookieClickSound -= 7;
   }
 
+  // Add a buy function to shimmering veil (off) to disable autoclicker when buying
+  Game.UpgradesById[563].buyFunction = function () {
+    autoClickerRunning = false; // Disable autoclicker
+  }
+
   document.addEventListener('keydown', // Add an event listener on keydown
     function (event) {
       if (event.key !== "\\") return; // Only run on backslash key pressed
