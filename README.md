@@ -12,7 +12,7 @@ Click For Me is a mod for Cookie Clicker (https://orteil.dashnet.org/cookieclick
 
 ##### With a bookmarklet
 - Create a new bookmark in your browser
-- Put ```javascript:(() => {Game.LoadMod('https://i-have-no-idea-what-im-doing-right-now/ClickForMe/ClickForMe.js');})();;``` inside the bookmark
+- Put ```javascript:(() => {Game.LoadMod('https://i-have-no-idea-what-im-doing-right-now/ClickForMe/ClickForMe.js');})();``` inside the bookmark
 - Click the bookmark while in the game
 
 ##### With a userscript
