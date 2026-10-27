@@ -17,7 +17,7 @@ function updateAutoclickerState(state) {
 
 function init() {
   console.info("LOADED MOD: ClickForMe");
-  Game.Popup("Loaded Click For Me Mod!");
+  Game.Notify("Loaded Mod", "Loaded Click for Me mod", [16, 5]);
   autoClickerRunning = false;
 
   // Half the volume of the cookie click sound
