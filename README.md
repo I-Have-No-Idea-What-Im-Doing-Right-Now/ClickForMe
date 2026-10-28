@@ -12,20 +12,20 @@ Click For Me is a mod for Cookie Clicker (https://orteil.dashnet.org/cookieclick
 
 ##### With a bookmarklet
 - Create a new bookmark in your browser
-- Put ```Game.LoadMod('https://i-have-no-idea-what-im-doing-right-now/ClickForMe/ClickForMe.js');``` inside the bookmark
+- Put ```javascript:(() => {Game.LoadMod('https://i-have-no-idea-what-im-doing-right-now/ClickForMe/ClickForMe.js');})();``` inside the bookmark
 - Click the bookmark while in the game
 
 ##### With a userscript
-- Make sure you have Violent Monkey extension installed
+- Make sure you have Violent Monkey extension installed (https://violentmonkey.github.io/)
 - Create a new userscript and paste in this code
-`````
+
 ```
 // ==UserScript==
 // @name         Cookie Clicker Click For Me Mod
 // @namespace    http://tampermonkey.net/
 // @version      1.0
-// @description  Automatically loads a mod when Cookie Clicker finishes initializing
-// @author       You
+// @description  Automatically loads the Click For Me mod when Cookie Clicker finishes initializing
+// @author       i-have-no-idea-what-im-doing-right-now
 // @match        https://orteil.dashnet.org/cookieclicker/
 // @match        https://orteil.dashnet.org/cookieclicker/beta/
 // @grant        none
